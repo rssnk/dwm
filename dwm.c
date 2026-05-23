@@ -32,6 +32,7 @@
 #include <sys/wait.h>
 #include <X11/cursorfont.h>
 #include <X11/keysym.h>
+// #include <X11/XF86keysym.h>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/Xproto.h>
@@ -1203,7 +1204,7 @@ gaplessgrid(Monitor *m) {
 		ch = rows ? m->wh / rows : m->wh;
 		cx = m->wx + cn*cw;
 		cy = m->wy + rn*ch;
-		resize(c, cx, cy, cw - 2 * c->bw, ch - 2 * c->bw, False);
+		resize(c, cx + (m->gap->gappx)/2, cy + (m->gap->gappx)/2, cw - 2 * (c->bw + (m->gap->gappx)/2), ch - 2 * (c->bw + (m->gap->gappx)/2), False);
 		rn++;
 		if(rn >= rows) {
 			rn = 0;
