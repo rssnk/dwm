@@ -1,21 +1,31 @@
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const Gap default_gap        = {.isgap = 1, .realgap = 5, .gappx = 5};
-
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-// TODO fonts
-static const char *fonts[]         = { "CaskaydiaMono Nerd Font Mono:size=12" };
-static const char dmenufont[]      = "CaskaydiaMono Nerd Font Mono:size=12";
+static const Gap default_gap        = {.isgap = 1, .realgap = 5, .gappx = 5};
 
-static const char col_gray1[]      = "#222222";
-static const char col_gray2[]      = "#444444";
-static const char col_gray3[]      = "#bbbbbb";
-static const char col_gray4[]      = "#eeeeee";
+static const char *fonts[]    = { "SF Mono:style=Semibold:size=12" };
+static const char dmenufont[] =   "SF Mono:style=Semibold:size=12";
+
+static const char bg_dark[]  = "#121212";
+static const char border[] = "#292929";
+static const char bg_light[] = "#202020";
+static const char fg_dark[]  = "#747474";
+static const char fg_light[] = "#dddcff";
+
 static const char *colors[][3]     = {
-	/*               fg         bg         border   */
-    [SchemeNorm]  = { col_gray3, col_gray1, col_gray2 },
-    [SchemeSel]   = { col_gray1, col_gray3, col_gray3 },
-	[SchemeTitle] = { col_gray3, col_gray1, col_gray2 },
+	/*               fg        bg       border */
+    [SchemeNorm]  = { fg_light,  bg_dark, border },
+    [SchemeSel]   = { fg_light, bg_dark, fg_dark },
+    // Statusbar right {text,background,not used but cannot be empty}
+    [SchemeStatus]  = { fg_light, bg_dark,  "#000000"  },
+    // Tagbar left selected {text,background,not used but cannot be empty}
+    [SchemeTagsSel]  = { fg_light, bg_dark,  "#000000"  },
+    // Tagbar left unselected {text,background,not used but cannot be empty}
+    [SchemeTagsNorm]  = { fg_dark, bg_dark,  "#000000"  },
+    // infobar middle  selected {text,background,not used but cannot be empty}
+    [SchemeInfoSel]  = { fg_light, bg_dark,  "#000000"  },
+    // infobar middle  unselected {text,background,not used but cannot be empty}
+    [SchemeInfoNorm]  = { fg_dark, bg_dark,  "#000000"  },
 };
 
 /* tagging */
@@ -50,8 +60,12 @@ static const Layout layouts[] = { /* first entry is default */
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[]         = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_gray2, "-sf", col_gray4, NULL };
-static const char *termcmd[]          = { "st", NULL };
+static const char *dmenucmd[] = {
+    "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
+    "-nb", bg_dark, "-nf", fg_light, "-sb", bg_light, "-sf", fg_light,
+    NULL
+};
+static const char *termcmd[]           = { "st", NULL };
 static const char *cmd_browser[]       = { "firefox", NULL };
 static const char *cmd_messenger[]     = { "Telegram", NULL };
 // TODO only active monitor
