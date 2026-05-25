@@ -115,7 +115,7 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,   XK_comma,                tagmon,         { .i = -1  } },
     { MODKEY|ShiftMask,   XK_period,               tagmon,         { .i = +1  } },
     // tiling
-    { MODKEY,             XK_s,                    zoom,           {0} },
+    { MODKEY,             XK_z,                    zoom,           {0} },
     { MODKEY,             XK_i,                    incnmaster,     { .i = +1 } },
     { MODKEY,             XK_d,                    incnmaster,     { .i = -1 } },
     // misc
