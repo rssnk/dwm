@@ -41,7 +41,7 @@ static const int refreshrate = 185;  /* refresh rate (per second) for client mov
 
 static const Layout layouts[] = { /* first entry is default */
 	/* symbol     arrange function */
-	{ "[M]",      monocle },
+	{ "[0]",      monocle },
 	{ "[]=",      tile },
 	{ "><>",      NULL },
 	{ "[#]",      gaplessgrid },
@@ -61,25 +61,28 @@ static const Layout layouts[] = { /* first entry is default */
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = {
-    "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
+    "dmenu_run", "-i", "-m", dmenumon, "-fn", dmenufont,
     "-nb", bg_dark, "-nf", fg_light, "-sb", bg_light, "-sf", fg_light,
     NULL
 };
+
 static const char *termcmd[]           = { "st", NULL };
 static const char *cmd_browser[]       = { "firefox", NULL };
 static const char *cmd_messenger[]     = { "Telegram", NULL };
-// TODO only active monitor
-static const char cmd_screenshot[]     = "maim --format=png | xclip -selection clipboard -t image/png";
+static const char cmd_screenshot[]     = "maim -g 1920x1080+$([ $(xdotool getmouselocation | sed -n \'s/.*x:\\([0-9]*\\).*/\\1/p\') -lt 1920 ] && echo 0 || echo 1920)+0 --format=png | xclip -selection clipboard -t image/png";
 static const char cmd_screenshot_sel[] = "maim --format=png --select | xclip -selection clipboard -t image/png";
 static const char cmd_vol_up[]         = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1  && pkill -RTMIN+2 dwmblocks";
 static const char cmd_vol_down[]       = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-  && pkill -RTMIN+2 dwmblocks";
 static const char cmd_vol_switch[]     = "toggle-sink && pkill -RTMIN+2 dwmblocks";
 static const char *cmd_record[]        = { "record", "-il", NULL };
 static const char *cmd_record_sel[]    = { "record", "-ils", NULL };
+static const char *cmd_hibernate[]     = { "sudo", "zzz", NULL};
+static const char cmd_dmenu_kill[] = "ps -u \"$USER\" -o pid,comm --no-headers | dmenu -i -p kill: -fn \'SF Mono:style=Semibold:size=12\' -nb \'#121212\' -nf \'#dddcff\' -sb \'#202020\' -sf \'#dddcff\' | awk \'{print $1}\' | xargs -r kill";
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
     // spawn
+    { MODKEY|ShiftMask,   XK_l,                    spawn,          { .v = cmd_hibernate } },
     { MODKEY,             XK_p,                    spawn,          { .v = dmenucmd     } },
     { MODKEY,             XK_Return,               spawn,          { .v = termcmd      } },
     { MODKEY,             XK_b,                    spawn,          { .v = cmd_browser   } },
@@ -97,6 +100,8 @@ static const Key keys[] = {
     // record scr
     { MODKEY,             XK_r,                    spawn,          { .v = cmd_record } },
     { MODKEY|ShiftMask,   XK_r,                    spawn,          { .v = cmd_record_sel } },
+
+    { MODKEY|ShiftMask,   XK_k,                    spawn,          SHCMD(cmd_dmenu_kill) },
     // mods
     { MODKEY,             XK_t,                    setlayout,      { .v = &layouts[1] } },
     { MODKEY|ShiftMask,   XK_f,                    setlayout,      { .v = &layouts[2] } },
@@ -148,7 +153,7 @@ static const Button buttons[] = {
     /* click                event mask      button          function        argument */
     { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
     { ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-    { ClkWinTitle,          0,              Button2,        zoom,           {0} },
+    { ClkWinTitle,          0,              Button2,        focusstack,     {0} },
     { ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
     { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
     { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },

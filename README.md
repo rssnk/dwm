@@ -2,7 +2,7 @@
 
 ![image](dwm.png)
 
-that is my fork of dwm with several patches applied:
+## patches
 
 - [pertag](https://dwm.suckless.org/patches/pertag/)
 - [hide vacant tags](https://dwm.suckless.org/patches/hide_vacant_tags/)
